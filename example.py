@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_custom_component import image_selector
+from streamlit_image_carousel import image_carousel
 
 st.set_page_config(
     page_title="Carrousel de Joueurs Infini",
@@ -87,7 +87,7 @@ with col2:
     arrow_color = st.color_picker("Couleur des flèches", "#ffffff", help="Couleur des flèches de navigation")
 
 # Utiliser le composant avec personnalisation
-result = image_selector(
+result = image_carousel(
     images=joueurs_images,
     selected_image=None,
     max_visible=max_visible,
@@ -170,7 +170,7 @@ st.header("🎨 Exemples de Configurations")
 st.subheader("🌙 Thème Sombre")
 with st.expander("Configuration sombre élégante"):
          st.code("""
-result = image_selector(
+result = image_carousel(
     images=joueurs_images,
     max_visible=7,
     background_color="#0f0f23",
@@ -187,7 +187,7 @@ result = image_selector(
 st.subheader("⚽ Thème Sportif")
 with st.expander("Configuration aux couleurs du football"):
          st.code("""
-result = image_selector(
+result = image_carousel(
     images=joueurs_images,
     max_visible=5,
     background_color="#1e3a8a",
@@ -204,7 +204,7 @@ result = image_selector(
 st.subheader("✨ Thème Moderne")
 with st.expander("Configuration moderne et minimaliste"):
          st.code("""
-result = image_selector(
+result = image_carousel(
     images=joueurs_images,
     max_visible=9,
     background_color="#f8fafc",
@@ -232,7 +232,7 @@ st.markdown("""
 ### Paramètres disponibles :
 
 ```python
-result = image_selector(
+result = image_carousel(
     # Paramètres obligatoires
     images=images,                    # Liste des images avec name et url
     key="mon_carousel",              # Clé unique pour Streamlit
@@ -256,10 +256,10 @@ result = image_selector(
 
 ```python
 # Configuration basique
-result = image_selector(images=images, key="basic")
+result = image_carousel(images=images, key="basic")
 
 # Configuration personnalisée
-result = image_selector(
+result = image_carousel(
     images=images,
     max_visible=7,
     background_color="#0f0f23",
@@ -270,7 +270,7 @@ result = image_selector(
 )
 
 # Configuration pour thème clair
-result = image_selector(
+result = image_carousel(
     images=images,
     background_color="#f8fafc",
     active_border_color="#3b82f6",

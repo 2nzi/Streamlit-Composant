@@ -15,7 +15,7 @@ else:
     _component_func = components.declare_component("custom_component", path=build_dir)
 
 
-def image_selector(
+def image_carousel(
     images: list, 
     selected_image: str = None, 
     max_visible: int = 5,
@@ -29,7 +29,7 @@ def image_selector(
     key=None
 ):
     """
-    Un composant Streamlit pour sélectionner des images avec style circulaire.
+    Un composant Streamlit moderne pour créer des carrousels d'images interactifs.
     
     Parameters:
     -----------

@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_custom_component import image_selector
+from streamlit_image_carousel import image_carousel
 
 st.set_page_config(page_title="Exemple Image Selector", page_icon="🎨")
 
@@ -19,7 +19,7 @@ images = [
 
 # Exemple 1: Configuration basique
 st.header("1️⃣ Configuration basique")
-result1 = image_selector(
+result1 = image_carousel(
     images=images,
     key="basic_example"
 )
@@ -29,7 +29,7 @@ if result1:
 
 # Exemple 2: Configuration avec 7 joueurs visibles
 st.header("2️⃣ Configuration avec 7 joueurs visibles")
-result2 = image_selector(
+result2 = image_carousel(
     images=images,
     max_visible=7,
     key="seven_players"
@@ -40,7 +40,7 @@ if result2:
 
 # Exemple 3: Configuration avec couleurs personnalisées
 st.header("3️⃣ Configuration avec couleurs personnalisées")
-result3 = image_selector(
+result3 = image_carousel(
     images=images,
     max_visible=5,
     background_color="#0f0f23",
@@ -58,7 +58,7 @@ if result3:
 
 # Exemple 4: Configuration thème clair
 st.header("4️⃣ Configuration thème clair")
-result4 = image_selector(
+result4 = image_carousel(
     images=images,
     max_visible=5,
     background_color="#f8fafc",
@@ -76,7 +76,7 @@ if result4:
 
 # Exemple 5: Configuration avec image présélectionnée
 st.header("5️⃣ Configuration avec image présélectionnée")
-result5 = image_selector(
+result5 = image_carousel(
     images=images,
     selected_image="Lionel Messi",
     max_visible=5,

@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "streamlit-custom-component"
-version = "0.1.0"
-description = "Un composant Streamlit personnalisé pour le développement local"
+name = "streamlit-image-carousel"
+version = "1.0.0"
+description = "Un composant Streamlit moderne pour créer des carrousels d'images interactifs"
 requires-python = ">=3.8"
 dependencies = [
     "streamlit>=1.28.0",
@@ -13,4 +13,4 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["streamlit_custom_component*"] 
+include = ["streamlit_image_carousel*"] 

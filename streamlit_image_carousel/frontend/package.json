@@ -1,7 +1,7 @@
 {
-  "name": "streamlit-custom-component-frontend",
+  "name": "streamlit-image-carousel-frontend",
   "version": "0.1.0",
-  "description": "Frontend pour le composant Streamlit personnalisé",
+  "description": "Frontend pour le composant Streamlit Image Carousel",
   "main": "dist/index.js",
   "scripts": {
     "start": "vite --port 3001",

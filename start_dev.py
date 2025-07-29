@@ -58,7 +58,7 @@ def check_npm_installed():
 
 def setup_development_mode():
     """Configure le mode développement."""
-    init_file = Path("streamlit_custom_component/__init__.py")
+    init_file = Path("streamlit_image_carousel/__init__.py")
     
     if not init_file.exists():
         print("❌ Fichier __init__.py non trouvé")
@@ -84,7 +84,7 @@ def setup_development_mode():
 
 def install_dependencies():
     """Installe les dépendances."""
-    frontend_dir = Path("streamlit_custom_component/frontend")
+    frontend_dir = Path("streamlit_image_carousel/frontend")
     
     if not frontend_dir.exists():
         print("❌ Dossier frontend non trouvé")
@@ -102,7 +102,7 @@ def install_dependencies():
 
 def start_frontend_dev_server():
     """Démarre le serveur de développement frontend."""
-    frontend_dir = Path("streamlit_custom_component/frontend")
+    frontend_dir = Path("streamlit_image_carousel/frontend")
     
     print("🚀 Démarrage du serveur de développement frontend...")
     print("📍 Le serveur sera accessible sur http://localhost:3001")

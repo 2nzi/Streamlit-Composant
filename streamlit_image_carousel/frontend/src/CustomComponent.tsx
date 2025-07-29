@@ -104,38 +104,38 @@ function ImageSelector({ args }: ComponentProps) {
 
   if (!images || images.length === 0) {
     return (
-             <div style={{ 
-         padding: '20px', 
-         backgroundColor: background_color,
-         borderRadius: '12px',
-         textAlign: 'center',
-         color: text_color
-       }}>
-         Aucune image disponible
-       </div>
+      <div style={{ 
+        padding: '20px', 
+        backgroundColor: background_color,
+        borderRadius: '12px',
+        textAlign: 'center',
+        color: text_color
+      }}>
+        Aucune image disponible
+      </div>
     )
   }
 
   return (
-         <div style={{ 
-       padding: '20px', 
-       backgroundColor: background_color,
-       borderRadius: '12px',
-       textAlign: 'center',
-       color: text_color,
-       fontFamily: 'Urbanist, sans-serif'
-     }}>
+    <div style={{ 
+      padding: '20px', 
+      backgroundColor: background_color,
+      borderRadius: '12px',
+      textAlign: 'center',
+      color: text_color,
+      fontFamily: 'Urbanist, sans-serif'
+    }}>
       {/* Nom du joueur actif */}
-             <div style={{
-         position: 'relative',
-         textAlign: 'center',
-         fontSize: '1.2rem',
-         fontWeight: 'bold',
-         marginBottom: '1rem',
-         color: text_color,
-         textTransform: 'uppercase',
-         letterSpacing: '1px'
-       }}>
+      <div style={{
+        position: 'relative',
+        textAlign: 'center',
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: text_color,
+        textTransform: 'uppercase',
+        letterSpacing: '1px'
+      }}>
         {images[activeIndex]?.name || 'Joueur inconnu'}
       </div>
 
@@ -189,8 +189,8 @@ function ImageSelector({ args }: ComponentProps) {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-                     {visibleImages.map((image, index) => {
-             const isSelected = index === Math.floor(max_visible / 2) // L'image centrale est sélectionnée
+          {visibleImages.map((image, index) => {
+            const isSelected = index === Math.floor(max_visible / 2) // L'image centrale est sélectionnée
             
             return (
               <div
@@ -204,17 +204,17 @@ function ImageSelector({ args }: ComponentProps) {
                   position: 'absolute',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                                     border: isSelected ? `2px solid ${active_border_color}` : '2px solid transparent',
-                   backgroundColor: '#000000',
-                   opacity: 1,
-                   visibility: 'visible',
-                   zIndex: isSelected ? 5 : 5 - Math.abs(index - Math.floor(max_visible / 2)),
-                   boxShadow: isSelected ? 
-                     `0 0 10px ${active_glow_color}, 0 0 20px ${active_glow_color.replace('0.5', '0.3')}, 0 0 30px ${active_glow_color.replace('0.5', '0.1')}` : 
-                     'none',
-                                     // Positionnement dynamique des images selon max_visible
-                   left: `${(index / (max_visible - 1)) * 100}%`,
-                   transform: `translateX(-${(index / (max_visible - 1)) * 100}%)`
+                  border: isSelected ? `2px solid ${active_border_color}` : '2px solid transparent',
+                  backgroundColor: '#000000',
+                  opacity: 1,
+                  visibility: 'visible',
+                  zIndex: isSelected ? 5 : 5 - Math.abs(index - Math.floor(max_visible / 2)),
+                  boxShadow: isSelected ? 
+                    `0 0 10px ${active_glow_color}, 0 0 20px ${active_glow_color.replace('0.5', '0.3')}, 0 0 30px ${active_glow_color.replace('0.5', '0.1')}` : 
+                    'none',
+                  // Positionnement dynamique des images selon max_visible
+                  left: `${(index / (max_visible - 1)) * 100}%`,
+                  transform: `translateX(-${(index / (max_visible - 1)) * 100}%)`
                 }}
               >
                 {image.url ? (
@@ -241,36 +241,36 @@ function ImageSelector({ args }: ComponentProps) {
                     }}
                   />
                 ) : null}
-                                 {/* Fallback en cas d'absence d'URL ou d'erreur de chargement */}
-                 <div 
-                   className="image-fallback"
-                   style={{
-                     width: '100%',
-                     height: '100%',
-                     display: image.url ? 'none' : 'flex',
-                     flexDirection: 'column',
-                     alignItems: 'center',
-                     justifyContent: 'center',
-                     backgroundColor: fallback_background,
-                     color: text_color,
-                     fontSize: isSelected ? '12px' : '10px',
-                     textAlign: 'center',
-                     lineHeight: '1.1',
-                     fontWeight: '600',
-                     textTransform: 'uppercase',
-                     letterSpacing: '0.3px',
-                     borderRadius: '50%',
-                     boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
-                     background: `linear-gradient(135deg, ${fallback_background} 0%, ${fallback_gradient_end} 100%)`,
-                     position: 'absolute',
-                     top: 0,
-                     left: 0,
-                     wordBreak: 'break-word',
-                     overflow: 'hidden'
-                   }}
-                 >
-                   {image.name}
-                 </div>
+                {/* Fallback en cas d'absence d'URL ou d'erreur de chargement */}
+                <div 
+                  className="image-fallback"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    display: image.url ? 'none' : 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: fallback_background,
+                    color: text_color,
+                    fontSize: isSelected ? '12px' : '10px',
+                    textAlign: 'center',
+                    lineHeight: '1.1',
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.3px',
+                    borderRadius: '50%',
+                    boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
+                    background: `linear-gradient(135deg, ${fallback_background} 0%, ${fallback_gradient_end} 100%)`,
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    wordBreak: 'break-word',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {image.name}
+                </div>
               </div>
             )
           })}
@@ -303,10 +303,8 @@ function ImageSelector({ args }: ComponentProps) {
           }} />
         </button>
       </div>
-
-      
     </div>
   )
 }
 
-export default withStreamlitConnection(ImageSelector)
+export default withStreamlitConnection(ImageSelector) 

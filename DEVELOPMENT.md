@@ -1,238 +1,273 @@
-# Guide de Développement
+# 🛠️ Guide de Développement - Streamlit Image Carousel
 
-Ce guide vous explique comment développer, tester et publier votre composant Streamlit personnalisé.
+Ce guide vous accompagne dans le développement et la contribution au composant Streamlit Image Carousel.
 
-## 🚀 Démarrage Rapide
-
-### Prérequis
+## 📋 Prérequis
 
 - **Python 3.8+**
 - **Node.js 16+**
 - **npm ou yarn**
+- **Git**
 
-### Installation
+## 🚀 Installation pour le développement
 
-1. **Cloner le repository**
-   ```bash
-   git clone <votre-repo>
-   cd streamlit-custom-component
-   ```
-
-2. **Créer un environnement virtuel**
-   ```bash
-   python -m venv venv
-   # Sur Windows
-   venv\Scripts\activate
-   # Sur macOS/Linux
-   source venv/bin/activate
-   ```
-
-3. **Installer les dépendances Python**
-   ```bash
-   pip install -e .
-   ```
-
-4. **Installer les dépendances frontend**
-   ```bash
-   cd streamlit_custom_component/frontend
-   npm install
-   ```
-
-## 🛠️ Développement
-
-### Mode Développement
-
-1. **Démarrer le serveur de développement frontend**
-   ```bash
-   cd streamlit_custom_component/frontend
-   npm run start
-   ```
-   Le serveur démarre sur `http://localhost:3001`
-
-2. **Modifier le mode de développement dans Python**
-   Dans `streamlit_custom_component/__init__.py`, changez :
-   ```python
-   _RELEASE = False  # Au lieu de True
-   ```
-
-3. **Lancer l'application Streamlit**
-   ```bash
-   streamlit run example.py
-   ```
-
-### Structure des Fichiers
-
-```
-streamlit-custom-component/
-├── setup.py                          # Configuration du package
-├── pyproject.toml                    # Configuration moderne
-├── README.md                         # Documentation utilisateur
-├── DEVELOPMENT.md                    # Ce guide
-├── example.py                        # Exemple d'utilisation
-├── build.py                          # Script de build automatisé
-├── streamlit_custom_component/
-│   ├── __init__.py                   # API Python du composant
-│   └── frontend/
-│       ├── package.json              # Dépendances npm
-│       ├── vite.config.ts            # Configuration Vite
-│       ├── tsconfig.json             # Configuration TypeScript
-│       ├── index.html                # Page HTML de développement
-│       └── src/
-│           ├── CustomComponent.tsx   # Composant React principal
-│           ├── index.tsx             # Point d'entrée pour le build
-│           └── main.tsx              # Point d'entrée pour le développement
-└── MANIFEST.in                       # Fichiers à inclure dans le package
-```
-
-### Modification du Composant
-
-#### Frontend (React/TypeScript)
-
-Le composant principal se trouve dans `streamlit_custom_component/frontend/src/CustomComponent.tsx`.
-
-**Points clés :**
-- Utilisez `withStreamlitConnection()` pour wrapper votre composant
-- Accédez aux props via `args` (ex: `args.message`, `args.color`)
-- Envoyez des données à Python avec `Streamlit.setComponentValue()`
-- Ajustez la hauteur avec `Streamlit.setFrameHeight()`
-
-#### Backend (Python)
-
-L'API Python se trouve dans `streamlit_custom_component/__init__.py`.
-
-**Points clés :**
-- Déclarez le composant avec `components.declare_component()`
-- En mode développement, utilisez `url="http://localhost:3001"`
-- En production, utilisez `path=build_dir`
-
-## 🧪 Tests
-
-### Test Manuel
-
-1. **Mode développement**
-   ```bash
-   # Terminal 1
-   cd streamlit_custom_component/frontend
-   npm run start
-   
-   # Terminal 2
-   streamlit run example.py
-   ```
-
-2. **Mode production**
-   ```bash
-   # Build le frontend
-   cd streamlit_custom_component/frontend
-   npm run build
-   
-   # Tester le package
-   pip install -e .
-   streamlit run example.py
-   ```
-
-### Test du Composant
-
+### 1. Cloner le repository
 ```bash
-# Build le frontend
-cd streamlit_custom_component/frontend
-npm run build
+git clone https://github.com/yourusername/streamlit-image-carousel.git
+cd streamlit-image-carousel
+```
 
-# Tester le composant
+### 2. Installation des dépendances Python
+```bash
+# Créer un environnement virtuel
+python -m venv venv
+
+# Activer l'environnement virtuel
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
+# Installer les dépendances
+pip install -e .
+pip install -r requirements.txt
+```
+
+### 3. Installation des dépendances frontend
+```bash
+cd streamlit_image_carousel/frontend
+npm install
+```
+
+## 🔧 Mode Développement
+
+### Démarrage du serveur frontend
+```bash
+cd streamlit_image_carousel/frontend
+npm run dev
+```
+Le serveur frontend sera accessible sur `http://localhost:3001`
+
+### Démarrage de l'application Streamlit
+```bash
+# Dans un autre terminal
 streamlit run example.py
 ```
 
-## 📦 Build
-
-### Build Frontend
-
+### Démarrage rapide avec le script
 ```bash
-cd streamlit_custom_component/frontend
+python start_dev.py
+```
+
+## 📁 Structure du Projet
+
+```
+streamlit-image-carousel/
+├── README.md                 # Documentation principale
+├── DEVELOPMENT.md           # Ce guide
+├── LICENSE                  # Licence MIT
+├── pyproject.toml          # Configuration du package
+├── setup.py                # Script d'installation
+├── requirements.txt        # Dépendances Python
+├── start_dev.py           # Script de démarrage rapide
+├── example.py             # Application d'exemple principale
+├── example_image_selector.py  # Exemples simples
+├── streamlit_image_carousel/  # Package principal
+│   ├── __init__.py        # API Python
+│   └── frontend/          # Application React
+│       ├── package.json
+│       ├── tsconfig.json
+│       ├── vite.config.ts
+│       ├── index.html
+│       └── src/
+│           ├── CustomComponent.tsx  # Composant principal
+│           ├── index.tsx
+│           └── main.tsx
+└── venv/                  # Environnement virtuel Python
+```
+
+## 🎯 Architecture
+
+### Backend (Python)
+- **`__init__.py`** : Définit l'API publique du composant
+- **`components.declare_component()`** : Déclare le composant Streamlit
+- **Gestion des paramètres** : Validation et transmission au frontend
+
+### Frontend (React + TypeScript)
+- **`CustomComponent.tsx`** : Composant React principal
+- **`withStreamlitConnection()`** : Connexion avec Streamlit
+- **Gestion d'état** : `useState` pour l'index actif
+- **Navigation** : Logique de carrousel infini
+- **Styling** : CSS-in-JS avec personnalisation dynamique
+
+## 🔄 Workflow de Développement
+
+### 1. Modification du frontend
+```bash
+# Modifier le fichier
+streamlit_image_carousel/frontend/src/CustomComponent.tsx
+
+# Les changements sont automatiquement rechargés
+# grâce au hot reload de Vite
+```
+
+### 2. Modification du backend
+```bash
+# Modifier le fichier
+streamlit_image_carousel/__init__.py
+
+# Redémarrer l'application Streamlit
+# Ctrl+C puis streamlit run example.py
+```
+
+### 3. Test des modifications
+- Ouvrir `http://localhost:8501` dans le navigateur
+- Tester les nouvelles fonctionnalités
+- Vérifier la console pour les erreurs
+
+## 🧪 Tests
+
+### Tests manuels
+1. **Navigation** : Tester les flèches et les clics
+2. **Personnalisation** : Tester tous les paramètres de couleur
+3. **Responsive** : Tester sur différentes tailles d'écran
+4. **Gestion d'erreurs** : Tester avec des URLs d'images invalides
+
+### Tests automatisés (à implémenter)
+```bash
+# Tests Python
+pytest tests/
+
+# Tests frontend
+npm test
+```
+
+## 📦 Build pour Production
+
+### Build du frontend
+```bash
+cd streamlit_image_carousel/frontend
 npm run build
 ```
 
-Ceci crée les fichiers de production dans le dossier `build/`.
+### Configuration pour production
+```python
+# Dans __init__.py, changer :
+_RELEASE = True
+```
 
-## 🔧 Configuration
+### Test du build
+```bash
+# Installer le package en mode développement
+pip install -e .
 
-### Personnalisation du Nom
+# Tester avec l'exemple
+streamlit run example.py
+```
 
-1. **Renommer le package**
-   - `streamlit_custom_component/` → `votre_nom_composant/`
-   - Mettre à jour `setup.py` et `pyproject.toml`
-   - Mettre à jour les imports dans `example.py`
+## 🚀 Publication
 
-2. **Mettre à jour les métadonnées**
-   - Nom, version, description dans `setup.py`
-   - Informations d'auteur
-   - URL du repository
+### 1. Préparation
+```bash
+# Mettre à jour la version dans pyproject.toml
+# Mettre à jour le CHANGELOG.md
+# Tester le build de production
+```
 
-### Ajout de Dépendances
+### 2. Build et publication
+```bash
+# Build du package
+python -m build
+
+# Publication sur PyPI
+twine upload dist/*
+```
+
+### 3. Vérification
+```bash
+# Installer depuis PyPI
+pip install streamlit-image-carousel
+
+# Tester l'installation
+python -c "from streamlit_image_carousel import image_carousel; print('OK')"
+```
+
+## 🐛 Débogage
+
+### Erreurs communes
+
+#### "Module not found"
+```bash
+pip install -e .
+```
+
+#### "npm command not found"
+- Installer Node.js depuis https://nodejs.org/
+
+#### "Composant ne s'affiche pas"
+- Vérifier que le serveur frontend tourne sur `http://localhost:3001`
+- Vérifier que `_RELEASE = False` dans `__init__.py`
+
+#### "Erreurs TypeScript"
+```bash
+cd streamlit_image_carousel/frontend
+npm run build
+```
+
+### Outils de débogage
 
 #### Frontend
-```bash
-cd streamlit_custom_component/frontend
-npm install nom-du-package
-```
+- **React DevTools** : Extension navigateur
+- **Console navigateur** : `F12` pour voir les erreurs
+- **Network tab** : Vérifier les requêtes
 
 #### Backend
-Ajoutez dans `setup.py` ou `pyproject.toml` :
-```python
-install_requires=[
-    "streamlit>=1.28.0",
-    "votre-dependance>=1.0.0",
-]
+- **Streamlit debug** : `streamlit run example.py --logger.level=debug`
+- **Python debugger** : `import pdb; pdb.set_trace()`
+
+## 📝 Contribution
+
+### 1. Fork et clone
+```bash
+git clone https://github.com/yourusername/streamlit-image-carousel.git
+cd streamlit-image-carousel
 ```
 
-## 🐛 Dépannage
+### 2. Créer une branche
+```bash
+git checkout -b feature/nouvelle-fonctionnalite
+```
 
-### Erreurs Communes
+### 3. Développer
+- Suivre les conventions de code
+- Ajouter des tests si possible
+- Documenter les nouvelles fonctionnalités
 
-1. **Module not found**
-   - Vérifiez que le package est installé : `pip install -e .`
-   - Vérifiez les imports dans `__init__.py`
+### 4. Commit et push
+```bash
+git add .
+git commit -m "feat: ajouter nouvelle fonctionnalité"
+git push origin feature/nouvelle-fonctionnalite
+```
 
-2. **Frontend ne se charge pas**
-   - Vérifiez que le serveur de développement tourne sur le bon port
-   - Vérifiez `_RELEASE = False` en mode développement
-
-3. **Build échoue**
-   - Vérifiez que Node.js et npm sont installés
-   - Nettoyez les caches : `npm cache clean --force`
-
-4. **Composant ne s'affiche pas**
-   - Vérifiez la console du navigateur pour les erreurs JavaScript
-   - Vérifiez les logs Streamlit
-
-### Debug
-
-1. **Mode debug frontend**
-   ```bash
-   cd streamlit_custom_component/frontend
-   npm run start
-   # Ouvrir http://localhost:3001 dans le navigateur
-   ```
-
-2. **Mode debug Streamlit**
-   ```bash
-   streamlit run example.py --logger.level=debug
-   ```
+### 5. Pull Request
+- Créer une PR sur GitHub
+- Décrire les changements
+- Attendre la review
 
 ## 📚 Ressources
 
 - [Documentation Streamlit Components](https://docs.streamlit.io/library/advanced-features/streamlit-components)
-- [Template officiel](https://github.com/streamlit/component-template)
-- [streamlit-component-lib](https://github.com/streamlit/streamlit-component-lib)
+- [React Documentation](https://reactjs.org/docs/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Vite Documentation](https://vitejs.dev/)
-- [React Documentation](https://react.dev/)
 
-## 🤝 Contribution
+## 🤝 Support
 
-1. Fork le repository
-2. Créer une branche feature : `git checkout -b feature/nouvelle-fonctionnalite`
-3. Commit les changements : `git commit -am 'Ajouter nouvelle fonctionnalité'`
-4. Push la branche : `git push origin feature/nouvelle-fonctionnalite`
-5. Créer une Pull Request
+- **Issues** : [GitHub Issues](https://github.com/yourusername/streamlit-image-carousel/issues)
+- **Discussions** : [GitHub Discussions](https://github.com/yourusername/streamlit-image-carousel/discussions)
+- **Email** : contact@example.com
 
-## 📄 Licence
+---
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails. 
+**Happy coding! 🎨✨** 
