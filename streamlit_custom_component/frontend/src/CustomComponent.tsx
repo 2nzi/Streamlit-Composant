@@ -11,7 +11,17 @@ interface ImageItem {
 }
 
 function ImageSelector({ args }: ComponentProps) {
-  const { images, selected_image, max_visible = 5 } = args
+  const { 
+    images, 
+    selected_image, 
+    max_visible = 5,
+    background_color = '#1a1a2e',
+    active_border_color = '#ffffff',
+    active_glow_color = 'rgba(255, 255, 255, 0.5)',
+    fallback_background = '#2a2a3e',
+    fallback_gradient_end = 'rgb(0, 0, 0)',
+    text_color = '#ffffff'
+  } = args
   const [activeIndex, setActiveIndex] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -28,30 +38,28 @@ function ImageSelector({ args }: ComponentProps) {
     }
   }, [selected_image, images])
 
-  // Calculer les 5 images visibles (2 avant, 1 central, 2 après)
+  // Calculer les images visibles (dynamique selon max_visible)
   const getVisibleImages = () => {
     if (!images || images.length === 0) return []
     
     const length = images.length
-    const prev2 = (activeIndex - 2 + length) % length
-    const prev1 = (activeIndex - 1 + length) % length
-    const next1 = (activeIndex + 1) % length
-    const next2 = (activeIndex + 2) % length
+    const centerIndex = Math.floor(max_visible / 2)
+    const visibleImages = []
     
-    return [
-      images[prev2],
-      images[prev1],
-      images[activeIndex],
-      images[next1],
-      images[next2]
-    ]
+    for (let i = 0; i < max_visible; i++) {
+      const offset = i - centerIndex
+      const imageIndex = (activeIndex + offset + length) % length
+      visibleImages.push(images[imageIndex])
+    }
+    
+    return visibleImages
   }
 
   const visibleImages = getVisibleImages()
 
-  // Sélectionner un joueur par position (0-4)
+  // Sélectionner un joueur par position
   const selectPlayer = (position: number) => {
-    const centerPosition = 2 // Index du joueur central
+    const centerPosition = Math.floor(max_visible / 2) // Index du joueur central
     const diff = position - centerPosition
     const newIndex = (activeIndex + diff + images.length) % images.length
     setActiveIndex(newIndex)
@@ -95,38 +103,38 @@ function ImageSelector({ args }: ComponentProps) {
 
   if (!images || images.length === 0) {
     return (
-      <div style={{ 
-        padding: '20px', 
-        backgroundColor: '#1a1a2e',
-        borderRadius: '12px',
-        textAlign: 'center',
-        color: '#ffffff'
-      }}>
-        Aucune image disponible
-      </div>
+             <div style={{ 
+         padding: '20px', 
+         backgroundColor: background_color,
+         borderRadius: '12px',
+         textAlign: 'center',
+         color: text_color
+       }}>
+         Aucune image disponible
+       </div>
     )
   }
 
   return (
-    <div style={{ 
-      padding: '20px', 
-      backgroundColor: '#1a1a2e',
-      borderRadius: '12px',
-      textAlign: 'center',
-      color: '#ffffff',
-      fontFamily: 'Urbanist, sans-serif'
-    }}>
+         <div style={{ 
+       padding: '20px', 
+       backgroundColor: background_color,
+       borderRadius: '12px',
+       textAlign: 'center',
+       color: text_color,
+       fontFamily: 'Urbanist, sans-serif'
+     }}>
       {/* Nom du joueur actif */}
-      <div style={{
-        position: 'relative',
-        textAlign: 'center',
-        fontSize: '1.2rem',
-        fontWeight: 'bold',
-        marginBottom: '1rem',
-        color: '#ffffff',
-        textTransform: 'uppercase',
-        letterSpacing: '1px'
-      }}>
+             <div style={{
+         position: 'relative',
+         textAlign: 'center',
+         fontSize: '1.2rem',
+         fontWeight: 'bold',
+         marginBottom: '1rem',
+         color: text_color,
+         textTransform: 'uppercase',
+         letterSpacing: '1px'
+       }}>
         {images[activeIndex]?.name || 'Joueur inconnu'}
       </div>
 
@@ -180,8 +188,8 @@ function ImageSelector({ args }: ComponentProps) {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          {visibleImages.map((image, index) => {
-            const isSelected = index === 2 // L'image centrale est sélectionnée
+                     {visibleImages.map((image, index) => {
+             const isSelected = index === Math.floor(max_visible / 2) // L'image centrale est sélectionnée
             
             return (
               <div
@@ -195,23 +203,17 @@ function ImageSelector({ args }: ComponentProps) {
                   position: 'absolute',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  border: isSelected ? '2px solid #ffffff' : '2px solid transparent',
-                  backgroundColor: '#000000',
-                  opacity: 1,
-                  visibility: 'visible',
-                  zIndex: isSelected ? 5 : 5 - Math.abs(index - 2),
-                  boxShadow: isSelected ? 
-                    '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1)' : 
-                    'none',
-                  // Positionnement des images
-                  left: index === 0 ? '0' : 
-                        index === 1 ? '22%' : 
-                        index === 2 ? '50%' : 
-                        index === 3 ? '78%' : '100%',
-                  transform: index === 0 ? 'none' : 
-                            index === 1 ? 'translateX(-22%)' : 
-                            index === 2 ? 'translateX(-50%)' : 
-                            index === 3 ? 'translateX(-78%)' : 'translateX(-100%)'
+                                     border: isSelected ? `2px solid ${active_border_color}` : '2px solid transparent',
+                   backgroundColor: '#000000',
+                   opacity: 1,
+                   visibility: 'visible',
+                   zIndex: isSelected ? 5 : 5 - Math.abs(index - Math.floor(max_visible / 2)),
+                   boxShadow: isSelected ? 
+                     `0 0 10px ${active_glow_color}, 0 0 20px ${active_glow_color.replace('0.5', '0.3')}, 0 0 30px ${active_glow_color.replace('0.5', '0.1')}` : 
+                     'none',
+                                     // Positionnement dynamique des images selon max_visible
+                   left: `${(index / (max_visible - 1)) * 100}%`,
+                   transform: `translateX(-${(index / (max_visible - 1)) * 100}%)`
                 }}
               >
                 {image.url ? (
@@ -248,8 +250,8 @@ function ImageSelector({ args }: ComponentProps) {
                      flexDirection: 'column',
                      alignItems: 'center',
                      justifyContent: 'center',
-                     backgroundColor: '#2a2a3e',
-                     color: '#ffffff',
+                     backgroundColor: fallback_background,
+                     color: text_color,
                      fontSize: isSelected ? '12px' : '10px',
                      textAlign: 'center',
                      lineHeight: '1.1',
@@ -258,7 +260,7 @@ function ImageSelector({ args }: ComponentProps) {
                      letterSpacing: '0.3px',
                      borderRadius: '50%',
                      boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
-                     background: 'linear-gradient(135deg, #2a2a3e 0%,rgb(0, 0, 0) 100%)',
+                     background: `linear-gradient(135deg, ${fallback_background} 0%, ${fallback_gradient_end} 100%)`,
                      position: 'absolute',
                      top: 0,
                      left: 0,
