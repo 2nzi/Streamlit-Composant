@@ -122,7 +122,7 @@ function ImageSelector({ args }: ComponentProps) {
         textAlign: 'center',
         fontSize: '1.2rem',
         fontWeight: 'bold',
-        marginBottom: '2rem',
+        marginBottom: '1rem',
         color: '#ffffff',
         textTransform: 'uppercase',
         letterSpacing: '1px'
@@ -301,77 +301,7 @@ function ImageSelector({ args }: ComponentProps) {
         </button>
       </div>
 
-      {/* Détails du joueur */}
-      {images[activeIndex] && (
-        <div style={{
-          padding: '0 3rem',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '1rem 5rem',
-            marginTop: '0.5rem',
-            width: '100%',
-            maxWidth: '350px',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.25rem',
-              alignItems: 'flex-start'
-            }}>
-              <span style={{
-                fontSize: '0.8rem',
-                color: '#8a8a8a',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                textAlign: 'left'
-              }}>
-                Position
-              </span>
-              <span style={{
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: 'white',
-                textAlign: 'left'
-              }}>
-                {activeIndex + 1} / {images.length}
-              </span>
-            </div>
-            
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.25rem',
-              alignItems: 'flex-start'
-            }}>
-              <span style={{
-                fontSize: '0.8rem',
-                color: '#8a8a8a',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                textAlign: 'left'
-              }}>
-                Nom
-              </span>
-              <span style={{
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: 'white',
-                textAlign: 'left'
-              }}>
-                {images[activeIndex].name}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   )
 }
