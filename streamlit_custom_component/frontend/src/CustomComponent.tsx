@@ -20,7 +20,8 @@ function ImageSelector({ args }: ComponentProps) {
     active_glow_color = 'rgba(255, 255, 255, 0.5)',
     fallback_background = '#2a2a3e',
     fallback_gradient_end = 'rgb(0, 0, 0)',
-    text_color = '#ffffff'
+    text_color = '#ffffff',
+    arrow_color = '#ffffff'
   } = args
   const [activeIndex, setActiveIndex] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
@@ -161,15 +162,15 @@ function ImageSelector({ args }: ComponentProps) {
             alignItems: 'center',
             justifyContent: 'center',
             padding: 0,
-            opacity: isHovering ? 1 : 0,
+            opacity: 1,
             transition: 'opacity 0.3s ease'
           }}
         >
           <div style={{
             width: '10px',
             height: '10px',
-            borderLeft: '2px solid white',
-            borderBottom: '2px solid white',
+            borderLeft: `2px solid ${arrow_color}`,
+            borderBottom: `2px solid ${arrow_color}`,
             transform: 'rotate(45deg)',
             marginLeft: '5px'
           }} />
@@ -288,15 +289,15 @@ function ImageSelector({ args }: ComponentProps) {
             alignItems: 'center',
             justifyContent: 'center',
             padding: 0,
-            opacity: isHovering ? 1 : 0,
+            opacity: 1,
             transition: 'opacity 0.3s ease'
           }}
         >
           <div style={{
             width: '10px',
             height: '10px',
-            borderLeft: '2px solid white',
-            borderBottom: '2px solid white',
+            borderLeft: `2px solid ${arrow_color}`,
+            borderBottom: `2px solid ${arrow_color}`,
             transform: 'rotate(-135deg)',
             marginRight: '5px'
           }} />

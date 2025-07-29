@@ -69,11 +69,35 @@ joueurs_images = [
 # Section du composant
 st.header("🎯 Carrousel de Joueurs")
 
-# Utiliser le composant
+# Paramètres de personnalisation
+st.subheader("🎨 Personnalisation")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    max_visible = st.slider("Nombre de joueurs visibles", 3, 9, 5, 2)
+    background_color = st.color_picker("Couleur de fond", "#1a1a2e")
+    active_border_color = st.color_picker("Couleur bordure active", "#ffffff")
+    text_color = st.color_picker("Couleur du texte", "#ffffff")
+
+with col2:
+    active_glow_color = st.color_picker("Couleur lueur active", "#ffffff", help="Couleur de l'effet de lueur autour du joueur sélectionné")
+    fallback_background = st.color_picker("Couleur fond fallback", "#2a2a3e")
+    fallback_gradient_end = st.color_picker("Couleur fin gradient", "#000000")
+    arrow_color = st.color_picker("Couleur des flèches", "#ffffff", help="Couleur des flèches de navigation")
+
+# Utiliser le composant avec personnalisation
 result = image_selector(
     images=joueurs_images,
     selected_image=None,
-    max_visible=5,
+    max_visible=max_visible,
+    background_color=background_color,
+    active_border_color=active_border_color,
+    active_glow_color=f"rgba({int(active_glow_color[1:3], 16)}, {int(active_glow_color[3:5], 16)}, {int(active_glow_color[5:7], 16)}, 0.5)",
+    fallback_background=fallback_background,
+    fallback_gradient_end=fallback_gradient_end,
+    text_color=text_color,
+    arrow_color=arrow_color,
     key="joueur_carousel"
 )
 
@@ -139,6 +163,60 @@ if result is not None:
 else:
     st.info("👆 Cliquez sur une image de joueur pour voir les informations !")
 
+# Section d'exemples
+st.header("🎨 Exemples de Configurations")
+
+# Exemple 1: Thème sombre
+st.subheader("🌙 Thème Sombre")
+with st.expander("Configuration sombre élégante"):
+         st.code("""
+result = image_selector(
+    images=joueurs_images,
+    max_visible=7,
+    background_color="#0f0f23",
+    active_border_color="#00ff88",
+    active_glow_color="rgba(0, 255, 136, 0.6)",
+    fallback_background="#1a1a2e",
+    fallback_gradient_end="#0a0a1a",
+    text_color="#ffffff",
+    arrow_color="#00ff88"
+)
+""")
+
+# Exemple 2: Thème sportif
+st.subheader("⚽ Thème Sportif")
+with st.expander("Configuration aux couleurs du football"):
+         st.code("""
+result = image_selector(
+    images=joueurs_images,
+    max_visible=5,
+    background_color="#1e3a8a",
+    active_border_color="#fbbf24",
+    active_glow_color="rgba(251, 191, 36, 0.7)",
+    fallback_background="#3b82f6",
+    fallback_gradient_end="#1e40af",
+    text_color="#ffffff",
+    arrow_color="#fbbf24"
+)
+""")
+
+# Exemple 3: Thème moderne
+st.subheader("✨ Thème Moderne")
+with st.expander("Configuration moderne et minimaliste"):
+         st.code("""
+result = image_selector(
+    images=joueurs_images,
+    max_visible=9,
+    background_color="#f8fafc",
+    active_border_color="#3b82f6",
+    active_glow_color="rgba(59, 130, 246, 0.5)",
+    fallback_background="#e2e8f0",
+    fallback_gradient_end="#cbd5e1",
+    text_color="#1e293b",
+    arrow_color="#3b82f6"
+)
+""")
+
 # Section d'informations
 st.header("ℹ️ Comment Utiliser le Carrousel")
 
@@ -151,25 +229,54 @@ st.markdown("""
 4. **Affichage intelligent** : Seules les images pertinentes sont visibles
 5. **Feedback visuel** : L'image centrale est mise en évidence
 
-### Dans votre code :
+### Paramètres disponibles :
 
 ```python
-import streamlit as st
-from streamlit_custom_component import image_selector
+result = image_selector(
+    # Paramètres obligatoires
+    images=images,                    # Liste des images avec name et url
+    key="mon_carousel",              # Clé unique pour Streamlit
+    
+    # Paramètres optionnels
+    selected_image=None,              # Image présélectionnée par nom
+    max_visible=5,                    # Nombre de joueurs visibles (3-9)
+    
+    # Personnalisation des couleurs
+    background_color="#1a1a2e",       # Couleur de fond du composant
+    active_border_color="#ffffff",    # Couleur de la bordure du joueur actif
+    active_glow_color="rgba(255, 255, 255, 0.5)",  # Couleur de l'effet de lueur
+    fallback_background="#2a2a3e",    # Couleur de fond des fallbacks
+    fallback_gradient_end="rgb(0, 0, 0)",  # Couleur de fin du gradient
+    text_color="#ffffff",              # Couleur du texte
+    arrow_color="#ffffff"              # Couleur des flèches
+)
+```
 
-# Vos images
-images = [
-    {"name": "Nom du joueur", "url": "URL_de_l_image"},
-    # ... plus d'images
-]
+### Exemples d'utilisation :
 
-# Utiliser le composant
-result = image_selector(images=images, key="mon_carousel")
+```python
+# Configuration basique
+result = image_selector(images=images, key="basic")
 
-# Récupérer la sélection
-if result:
-    nom_joueur = result["selected_image"]
-    position = result["current_index"]
-    # Faire votre logique de filtrage ici
+# Configuration personnalisée
+result = image_selector(
+    images=images,
+    max_visible=7,
+    background_color="#0f0f23",
+    active_border_color="#00ff88",
+    active_glow_color="rgba(0, 255, 136, 0.6)",
+    arrow_color="#00ff88",
+    key="custom"
+)
+
+# Configuration pour thème clair
+result = image_selector(
+    images=images,
+    background_color="#f8fafc",
+    active_border_color="#3b82f6",
+    text_color="#1e293b",
+    arrow_color="#3b82f6",
+    key="light_theme"
+)
 ```
 """)

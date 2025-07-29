@@ -15,7 +15,19 @@ else:
     _component_func = components.declare_component("custom_component", path=build_dir)
 
 
-def image_selector(images: list, selected_image: str = None, max_visible: int = 5, key=None):
+def image_selector(
+    images: list, 
+    selected_image: str = None, 
+    max_visible: int = 5,
+    background_color: str = '#1a1a2e',
+    active_border_color: str = '#ffffff',
+    active_glow_color: str = 'rgba(255, 255, 255, 0.5)',
+    fallback_background: str = '#2a2a3e',
+    fallback_gradient_end: str = 'rgb(0, 0, 0)',
+    text_color: str = '#ffffff',
+    arrow_color: str = '#ffffff',
+    key=None
+):
     """
     Un composant Streamlit pour sélectionner des images avec style circulaire.
     
@@ -27,6 +39,20 @@ def image_selector(images: list, selected_image: str = None, max_visible: int = 
         Image actuellement sélectionnée (optionnel)
     max_visible : int
         Nombre maximum d'images visibles à la fois (défaut: 5)
+    background_color : str
+        Couleur de fond du composant (défaut: '#1a1a2e')
+    active_border_color : str
+        Couleur de la bordure du joueur actif (défaut: '#ffffff')
+    active_glow_color : str
+        Couleur de l'effet de lueur (défaut: 'rgba(255, 255, 255, 0.5)')
+    fallback_background : str
+        Couleur de fond des fallbacks (défaut: '#2a2a3e')
+    fallback_gradient_end : str
+        Couleur de fin du gradient (défaut: 'rgb(0, 0, 0)')
+    text_color : str
+        Couleur du texte (défaut: '#ffffff')
+    arrow_color : str
+        Couleur des flèches de navigation (défaut: '#ffffff')
     key : str
         Une clé unique pour le composant
     
@@ -40,6 +66,13 @@ def image_selector(images: list, selected_image: str = None, max_visible: int = 
         images=images,
         selected_image=selected_image,
         max_visible=max_visible,
+        background_color=background_color,
+        active_border_color=active_border_color,
+        active_glow_color=active_glow_color,
+        fallback_background=fallback_background,
+        fallback_gradient_end=fallback_gradient_end,
+        text_color=text_color,
+        arrow_color=arrow_color,
         key=key,
         default=None
     )
