@@ -224,24 +224,50 @@ function ImageSelector({ args }: ComponentProps) {
                       objectFit: 'cover',
                       objectPosition: 'center 20%'
                     }}
+                    onError={(e) => {
+                      // En cas d'erreur de chargement, remplacer l'image par le fallback
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const fallback = parent.querySelector('.image-fallback') as HTMLElement;
+                        if (fallback) {
+                          fallback.style.display = 'flex';
+                        }
+                      }
+                    }}
                   />
-                ) : (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#2a2a3e',
-                    color: '#ffffff',
-                    fontSize: '10px',
-                    textAlign: 'center',
-                    padding: '5px',
-                    lineHeight: '1.2'
-                  }}>
-                    {image.name}
-                  </div>
-                )}
+                ) : null}
+                                 {/* Fallback en cas d'absence d'URL ou d'erreur de chargement */}
+                 <div 
+                   className="image-fallback"
+                   style={{
+                     width: '100%',
+                     height: '100%',
+                     display: image.url ? 'none' : 'flex',
+                     flexDirection: 'column',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     backgroundColor: '#2a2a3e',
+                     color: '#ffffff',
+                     fontSize: isSelected ? '12px' : '10px',
+                     textAlign: 'center',
+                     lineHeight: '1.1',
+                     fontWeight: '600',
+                     textTransform: 'uppercase',
+                     letterSpacing: '0.3px',
+                     borderRadius: '50%',
+                     boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)',
+                     background: 'linear-gradient(135deg, #2a2a3e 0%,rgb(0, 0, 0) 100%)',
+                     position: 'absolute',
+                     top: 0,
+                     left: 0,
+                     wordBreak: 'break-word',
+                     overflow: 'hidden'
+                   }}
+                 >
+                   {image.name}
+                 </div>
               </div>
             )
           })}
