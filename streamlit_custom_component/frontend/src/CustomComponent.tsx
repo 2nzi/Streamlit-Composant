@@ -182,7 +182,6 @@ function ImageSelector({ args }: ComponentProps) {
         >
           {visibleImages.map((image, index) => {
             const isSelected = index === 2 // L'image centrale est sélectionnée
-            const isHidden = !isHovering && !isSelected
             
             return (
               <div
@@ -198,8 +197,8 @@ function ImageSelector({ args }: ComponentProps) {
                   transition: 'all 0.3s ease',
                   border: isSelected ? '2px solid #ffffff' : '2px solid transparent',
                   backgroundColor: '#000000',
-                  opacity: isHidden ? 0 : 1,
-                  visibility: isHidden ? 'hidden' : 'visible',
+                  opacity: 1,
+                  visibility: 'visible',
                   zIndex: isSelected ? 5 : 5 - Math.abs(index - 2),
                   boxShadow: isSelected ? 
                     '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 255, 255, 0.1)' : 
