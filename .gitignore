@@ -50,4 +50,7 @@ Thumbs.db
 .streamlit/
 
 # Logs
-*.log 
+*.log
+
+# PyPI configuration (contains sensitive tokens)
+.pypirc 

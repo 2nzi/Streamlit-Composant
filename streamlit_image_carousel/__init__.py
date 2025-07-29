@@ -2,7 +2,7 @@ import os
 import streamlit.components.v1 as components
 
 # Déclarer le composant
-_RELEASE = False  # Toujours en mode développement pour l'instant
+_RELEASE = True  # Toujours en mode développement pour l'instant
 
 if not _RELEASE:
     _component_func = components.declare_component(
