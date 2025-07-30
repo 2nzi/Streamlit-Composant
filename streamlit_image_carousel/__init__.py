@@ -1,13 +1,15 @@
 import os
 import streamlit.components.v1 as components
+from pathlib import Path
 
 # Déclarer le composant
 _RELEASE = False  # Mode développement pour tester localement
 
 if not _RELEASE:
     _component_func = components.declare_component(
-        "custom_component",
-        url="http://localhost:3001",
+        "image_carousel",
+        # path=str(Path(__file__).parent / "frontend" / "build")
+        url="http://localhost:3001", #TODO: change to the correct url
     )
 else:
     # Utiliser le chemin absolu pour que ça fonctionne après installation

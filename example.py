@@ -14,8 +14,21 @@ Ce composant permet de naviguer dans un carrousel infini de joueurs.
 Cliquez sur une image pour la centrer, ou utilisez les flèches pour naviguer !
 """)
 
+import base64
+from PIL import Image
+import io
+
+def image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return f"data:image/jpeg;base64,{base64.b64encode(image_file.read()).decode()}"
+
+
 # Exemple d'images de joueurs (plus d'images pour tester le carrousel)
 joueurs_images = [
+    {
+        "name": "Antoine Dupont",
+        "url": image_to_base64(r"C:\Users\antoi\Documents\Work_Learn\Rugby\data\player_images\AD.jpg")
+    },
     {
         "name": "Lionel Messi",
         "url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg"
