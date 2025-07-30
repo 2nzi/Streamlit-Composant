@@ -33,13 +33,27 @@ function ImageSelector({ args }: ComponentProps) {
   useEffect(() => {
     // Informer Streamlit que le composant est prêt
     Streamlit.setFrameHeight()
-  }, [])
+    
+    // Retourner automatiquement le premier élément au chargement
+    if (images && images.length > 0) {
+      const firstImage = images[0]
+      Streamlit.setComponentValue({
+        selected_image: firstImage.name,
+        selected_url: firstImage.url,
+        current_index: 0,
+        timestamp: new Date().toISOString()
+      })
+    }
+  }, [images])
 
   useEffect(() => {
     // Mettre à jour la sélection si elle change depuis Python
     if (selected_image) {
       const index = images?.findIndex((img: ImageItem) => img.name === selected_image) || 0
       setActiveIndex(index)
+    } else if (images && images.length > 0) {
+      // Si aucune sélection n'est spécifiée, utiliser le premier élément
+      setActiveIndex(0)
     }
   }, [selected_image, images])
 
