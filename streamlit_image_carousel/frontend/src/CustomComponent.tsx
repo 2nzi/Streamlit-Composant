@@ -164,7 +164,7 @@ function ImageSelector({ args }: ComponentProps) {
       textAlign: 'center',
       color: text_color,
       fontFamily: 'Urbanist, sans-serif',
-      minHeight: '500px'  // Augmentation de la hauteur minimale
+      // minHeight: '100px'  // Augmentation de la hauteur minimale
     }}>
       {/* Nom du joueur actif */}
       <div style={{
