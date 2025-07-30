@@ -15,7 +15,7 @@ function ImageSelector({ args }: ComponentProps) {
     images, 
     selected_image, 
     max_visible = 5,
-    background_color = '#ffffff',
+    background_color = '#000000',
     active_border_color = '#ffffff',
     active_glow_color = 'rgba(255, 255, 255, 0.5)',
     fallback_background = '#000000',
@@ -178,7 +178,7 @@ function ImageSelector({ args }: ComponentProps) {
       textAlign: 'center',
       color: text_color,
       fontFamily: 'Urbanist, sans-serif',
-      // minHeight: '100px'  // Augmentation de la hauteur minimale
+      // maxHeight: '100px'  // Augmentation de la hauteur minimale
     }}>
       {/* Nom du joueur actif */}
       <div style={{
@@ -365,7 +365,7 @@ function ImageSelector({ args }: ComponentProps) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: '200px'
+        minHeight: '100px'
       }}>
         {/* Barre de recherche */}
         <div style={{
@@ -409,7 +409,7 @@ function ImageSelector({ args }: ComponentProps) {
             backgroundColor: 'rgba(50, 50, 50, 0.2)',
             borderRadius: '12px',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            maxHeight: '120px',
+            maxHeight: '40px',
             overflowY: 'auto',
             zIndex: 1000,
             backdropFilter: 'blur(10px)',
