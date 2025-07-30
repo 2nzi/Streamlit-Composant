@@ -9,7 +9,7 @@ if not _RELEASE:
     _component_func = components.declare_component(
         "image_carousel",
         # path=str(Path(__file__).parent / "frontend" / "build")
-        url="http://localhost:3001", #TODO: change to the correct url
+        url="http://localhost:3002", #TODO: change to the correct url
     )
 else:
     # Utiliser le chemin absolu pour que ça fonctionne après installation

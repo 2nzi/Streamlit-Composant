@@ -23,8 +23,12 @@ function ImageSelector({ args }: ComponentProps) {
     text_color = '#ffffff',
     arrow_color = '#ffffff'
   } = args
+  
   const [activeIndex, setActiveIndex] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [filteredPlayers, setFilteredPlayers] = useState<ImageItem[]>([])
 
   useEffect(() => {
     // Informer Streamlit que le composant est prêt
@@ -34,10 +38,47 @@ function ImageSelector({ args }: ComponentProps) {
   useEffect(() => {
     // Mettre à jour la sélection si elle change depuis Python
     if (selected_image) {
-      const index = images?.findIndex(img => img.name === selected_image) || 0
+      const index = images?.findIndex((img: ImageItem) => img.name === selected_image) || 0
       setActiveIndex(index)
     }
   }, [selected_image, images])
+
+  // Fonction de recherche avec suggestions
+  useEffect(() => {
+    if (!images) return
+
+    if (searchTerm.trim() === '') {
+      setFilteredPlayers([])
+      setShowSuggestions(false)
+      return
+    }
+
+    const searchLower = searchTerm.toLowerCase()
+    const filtered = images.filter((player: ImageItem) => 
+      player.name.toLowerCase().includes(searchLower)
+    )
+
+    setFilteredPlayers(filtered)
+    setShowSuggestions(filtered.length > 0)
+  }, [searchTerm, images])
+
+  // Sélectionner un joueur depuis la recherche
+  const selectPlayerFromSearch = (player: ImageItem) => {
+    const index = images.findIndex((img: ImageItem) => img.name === player.name)
+    if (index !== -1) {
+      setActiveIndex(index)
+      setSearchTerm('')
+      setShowSuggestions(false)
+      
+      // Envoyer les données à Python
+      Streamlit.setComponentValue({
+        selected_image: player.name,
+        selected_url: player.url,
+        current_index: index,
+        timestamp: new Date().toISOString()
+      })
+    }
+  }
 
   // Calculer les images visibles (dynamique selon max_visible)
   const getVisibleImages = () => {
@@ -60,12 +101,11 @@ function ImageSelector({ args }: ComponentProps) {
 
   // Sélectionner un joueur par position
   const selectPlayer = (position: number) => {
-    const centerPosition = Math.floor(max_visible / 2) // Index du joueur central
+    const centerPosition = Math.floor(max_visible / 2)
     const diff = position - centerPosition
     const newIndex = (activeIndex + diff + images.length) % images.length
     setActiveIndex(newIndex)
     
-    // Envoyer les données à Python
     const selectedImage = images[newIndex]
     Streamlit.setComponentValue({
       selected_image: selectedImage.name,
@@ -123,7 +163,8 @@ function ImageSelector({ args }: ComponentProps) {
       borderRadius: '12px',
       textAlign: 'center',
       color: text_color,
-      fontFamily: 'Urbanist, sans-serif'
+      fontFamily: 'Urbanist, sans-serif',
+      minHeight: '500px'  // Augmentation de la hauteur minimale
     }}>
       {/* Nom du joueur actif */}
       <div style={{
@@ -190,7 +231,7 @@ function ImageSelector({ args }: ComponentProps) {
           onMouseLeave={() => setIsHovering(false)}
         >
           {visibleImages.map((image, index) => {
-            const isSelected = index === Math.floor(max_visible / 2) // L'image centrale est sélectionnée
+            const isSelected = index === Math.floor(max_visible / 2)
             
             return (
               <div
@@ -212,7 +253,6 @@ function ImageSelector({ args }: ComponentProps) {
                   boxShadow: isSelected ? 
                     `0 0 10px ${active_glow_color}, 0 0 20px ${active_glow_color.replace('0.5', '0.3')}, 0 0 30px ${active_glow_color.replace('0.5', '0.1')}` : 
                     'none',
-                  // Positionnement dynamique des images selon max_visible
                   left: `${(index / (max_visible - 1)) * 100}%`,
                   transform: `translateX(-${(index / (max_visible - 1)) * 100}%)`
                 }}
@@ -228,7 +268,6 @@ function ImageSelector({ args }: ComponentProps) {
                       objectPosition: 'center 20%'
                     }}
                     onError={(e) => {
-                      // En cas d'erreur de chargement, remplacer l'image par le fallback
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
                       const parent = target.parentElement;
@@ -241,7 +280,6 @@ function ImageSelector({ args }: ComponentProps) {
                     }}
                   />
                 ) : null}
-                {/* Fallback en cas d'absence d'URL ou d'erreur de chargement */}
                 <div 
                   className="image-fallback"
                   style={{
@@ -302,6 +340,111 @@ function ImageSelector({ args }: ComponentProps) {
             marginRight: '5px'
           }} />
         </button>
+      </div>
+
+      {/* Barre de recherche avec suggestions */}
+      <div style={{
+        marginTop: '2rem',
+        position: 'relative',
+        width: '300px',
+        margin: '2rem auto 0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '200px'
+      }}>
+        {/* Barre de recherche */}
+        <div style={{
+          position: 'relative',
+          marginBottom: '1rem',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Rechercher un joueur..."
+            style={{
+              width: '100%',
+              maxWidth: '280px',
+              padding: '10px 14px',
+              paddingLeft: '35px',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              color: text_color,
+              fontSize: '14px',
+              outline: 'none',
+              transition: 'all 0.3s ease',
+              fontFamily: 'Urbanist, sans-serif',
+              textAlign: 'left'
+            }}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => {
+              setTimeout(() => setShowSuggestions(false), 200)
+            }}
+          />
+        </div>
+
+        {/* Suggestions - Simplifiées */}
+        {showSuggestions && filteredPlayers.length > 0 && (
+          <div style={{
+            width: '280px',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            maxHeight: '200px',
+            overflowY: 'auto',
+            zIndex: 1000,
+            backdropFilter: 'blur(10px)',
+            marginTop: '0'
+          }}>
+            {filteredPlayers.slice(0, 5).map((player, index) => (
+              <div
+                key={index}
+                onClick={() => selectPlayerFromSearch(player)}
+                style={{
+                  padding: '12px 16px',
+                  cursor: 'pointer',
+                  borderBottom: index < filteredPlayers.length - 1 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+                  transition: 'background-color 0.2s ease',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                <div style={{
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  color: text_color
+                }}>
+                  {player.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Message si aucun résultat */}
+        {searchTerm && filteredPlayers.length === 0 && (
+          <div style={{
+            textAlign: 'center',
+            padding: '10px',
+            color: text_color,
+            opacity: 0.7,
+            fontSize: '13px',
+            width: '280px',
+            marginTop: '0'
+          }}>
+            Aucun joueur trouvé pour "{searchTerm}"
+          </div>
+        )}
       </div>
     </div>
   )

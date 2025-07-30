@@ -22,8 +22,7 @@ def image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return f"data:image/jpeg;base64,{base64.b64encode(image_file.read()).decode()}"
 
-
-# Exemple d'images de joueurs (plus d'images pour tester le carrousel)
+# Exemple d'images de joueurs
 joueurs_images = [
     {
         "name": "Antoine Dupont",
@@ -114,7 +113,70 @@ result = image_carousel(
     key="joueur_carousel"
 )
 
-# Section des résultats
+#  NOUVELLE SECTION : Barre de recherche
+st.header("🔍 Recherche de Joueurs")
+
+# Barre de recherche
+search_term = st.text_input(
+    "Rechercher un joueur par nom :",
+    placeholder="Ex: Messi, Dupont, Ronaldo...",
+    help="Tapez le nom ou une partie du nom du joueur"
+)
+
+# Fonction de recherche
+def search_players(players_list, search_term):
+    """Recherche des joueurs par nom"""
+    if not search_term:
+        return []
+    
+    search_term = search_term.lower().strip()
+    results = []
+    
+    for i, player in enumerate(players_list):
+        if search_term in player["name"].lower():
+            results.append({
+                "index": i,
+                "name": player["name"],
+                "url": player["url"]
+            })
+    
+    return results
+
+# Afficher les résultats de recherche
+if search_term:
+    search_results = search_players(joueurs_images, search_term)
+    
+    if search_results:
+        st.success(f"✅ {len(search_results)} joueur(s) trouvé(s) pour '{search_term}'")
+        
+        # Afficher les résultats dans des colonnes
+        cols = st.columns(min(3, len(search_results)))
+        
+        for i, result in enumerate(search_results):
+            with cols[i % 3]:
+                st.markdown(f"**{result['name']}**")
+                st.markdown(f"Position dans le carrousel: {result['index'] + 1}")
+                
+                # Bouton pour centrer le joueur dans le carrousel
+                if st.button(f"Centrer {result['name']}", key=f"center_{i}"):
+                    st.session_state.selected_player_index = result['index']
+                    st.rerun()
+    else:
+        st.warning(f"❌ Aucun joueur trouvé pour '{search_term}'")
+        
+        # Suggestions de recherche
+        st.info("💡 Suggestions :")
+        all_names = [player["name"] for player in joueurs_images]
+        suggestions = [name for name in all_names if any(letter in name.lower() for letter in search_term.lower())]
+        
+        if suggestions:
+            st.write("Joueurs similaires :")
+            for suggestion in suggestions[:5]:  # Limiter à 5 suggestions
+                st.write(f"• {suggestion}")
+        else:
+            st.write("Essayez avec un nom plus court ou vérifiez l'orthographe")
+
+# Section des résultats du carrousel
 st.header("📊 Informations du Joueur Sélectionné")
 
 if result is not None:
@@ -131,165 +193,29 @@ if result is not None:
     with col3:
         st.metric("Total Joueurs", len(joueurs_images))
     
-    # Afficher l'image sélectionnée
+    # Afficher l'image du joueur sélectionné
     if result.get("selected_url"):
-        st.subheader("🖼️ Image Sélectionnée")
-        st.image(result.get("selected_url"), width=200)
-    
-    # Exemple de filtre basé sur la sélection
-    st.subheader("🔍 Statistiques du Joueur")
-    
-    joueur_selectionne = result.get("selected_image")
-    if joueur_selectionne:
-        # Simuler des données de statistiques
-        stats = {
-            "Lionel Messi": {"buts": 800, "passes": 350, "trophées": 44},
-            "Cristiano Ronaldo": {"buts": 850, "passes": 250, "trophées": 35},
-            "Kylian Mbappé": {"buts": 300, "passes": 150, "trophées": 15},
-            "Erling Haaland": {"buts": 200, "passes": 50, "trophées": 8},
-            "Neymar Jr": {"buts": 400, "passes": 200, "trophées": 25},
-            "Kevin De Bruyne": {"buts": 150, "passes": 300, "trophées": 12},
-            "Mohamed Salah": {"buts": 250, "passes": 120, "trophées": 18},
-            "Robert Lewandowski": {"buts": 600, "passes": 100, "trophées": 30},
-            "Karim Benzema": {"buts": 450, "passes": 180, "trophées": 28},
-            "Harry Kane": {"buts": 350, "passes": 90, "trophées": 20},
-            "Vinícius Jr": {"buts": 150, "passes": 80, "trophées": 10},
-            "Jude Bellingham": {"buts": 100, "passes": 120, "trophées": 5}
-        }
-        
-        if joueur_selectionne in stats:
-            joueur_stats = stats[joueur_selectionne]
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("⚽ Buts", joueur_stats["buts"])
-            with col2:
-                st.metric("🎯 Passes", joueur_stats["passes"])
-            with col3:
-                st.metric("🏆 Trophées", joueur_stats["trophées"])
-        else:
-            st.info("Statistiques non disponibles pour ce joueur")
-    
-    # Afficher les données brutes
-    with st.expander("🔍 Données brutes du composant"):
-        st.json(result)
+        st.subheader("🖼️ Image du joueur sélectionné")
+        st.image(result["selected_url"], width=200)
 else:
-    st.info("👆 Cliquez sur une image de joueur pour voir les informations !")
+    st.info(" Cliquez sur un joueur dans le carrousel pour voir ses informations")
 
-# Section d'exemples
-st.header("🎨 Exemples de Configurations")
+# 📊 Statistiques
+st.header("📈 Statistiques")
 
-# Exemple 1: Thème sombre
-st.subheader("🌙 Thème Sombre")
-with st.expander("Configuration sombre élégante"):
-         st.code("""
-result = image_carousel(
-    images=joueurs_images,
-    max_visible=7,
-    background_color="#0f0f23",
-    active_border_color="#00ff88",
-    active_glow_color="rgba(0, 255, 136, 0.6)",
-    fallback_background="#1a1a2e",
-    fallback_gradient_end="#0a0a1a",
-    text_color="#ffffff",
-    arrow_color="#00ff88"
-)
-""")
+col1, col2, col3 = st.columns(3)
 
-# Exemple 2: Thème sportif
-st.subheader("⚽ Thème Sportif")
-with st.expander("Configuration aux couleurs du football"):
-         st.code("""
-result = image_carousel(
-    images=joueurs_images,
-    max_visible=5,
-    background_color="#1e3a8a",
-    active_border_color="#fbbf24",
-    active_glow_color="rgba(251, 191, 36, 0.7)",
-    fallback_background="#3b82f6",
-    fallback_gradient_end="#1e40af",
-    text_color="#ffffff",
-    arrow_color="#fbbf24"
-)
-""")
-
-# Exemple 3: Thème moderne
-st.subheader("✨ Thème Moderne")
-with st.expander("Configuration moderne et minimaliste"):
-         st.code("""
-result = image_carousel(
-    images=joueurs_images,
-    max_visible=9,
-    background_color="#f8fafc",
-    active_border_color="#3b82f6",
-    active_glow_color="rgba(59, 130, 246, 0.5)",
-    fallback_background="#e2e8f0",
-    fallback_gradient_end="#cbd5e1",
-    text_color="#1e293b",
-    arrow_color="#3b82f6"
-)
-""")
-
-# Section d'informations
-st.header("ℹ️ Comment Utiliser le Carrousel")
-
-st.markdown("""
-### Fonctionnalités :
-
-1. **Navigation par clic** : Cliquez sur une image pour la centrer
-2. **Navigation par flèches** : Utilisez les flèches qui apparaissent au survol
-3. **Carrousel infini** : Navigation circulaire dans la liste
-4. **Affichage intelligent** : Seules les images pertinentes sont visibles
-5. **Feedback visuel** : L'image centrale est mise en évidence
-
-### Paramètres disponibles :
-
-```python
-result = image_carousel(
-    # Paramètres obligatoires
-    images=images,                    # Liste des images avec name et url
-    key="mon_carousel",              # Clé unique pour Streamlit
+with col1:
+    st.metric("Total de joueurs", len(joueurs_images))
     
-    # Paramètres optionnels
-    selected_image=None,              # Image présélectionnée par nom
-    max_visible=5,                    # Nombre de joueurs visibles (3-9)
+with col2:
+    # Compter les joueurs par nationalité (exemple)
+    nationalities = {
+        "France": len([p for p in joueurs_images if "Dupont" in p["name"]]),
+        "Argentine": len([p for p in joueurs_images if "Messi" in p["name"]]),
+        "Portugal": len([p for p in joueurs_images if "Ronaldo" in p["name"]]),
+    }
+    st.metric("Joueurs français", nationalities.get("France", 0))
     
-    # Personnalisation des couleurs
-    background_color="#1a1a2e",       # Couleur de fond du composant
-    active_border_color="#ffffff",    # Couleur de la bordure du joueur actif
-    active_glow_color="rgba(255, 255, 255, 0.5)",  # Couleur de l'effet de lueur
-    fallback_background="#2a2a3e",    # Couleur de fond des fallbacks
-    fallback_gradient_end="rgb(0, 0, 0)",  # Couleur de fin du gradient
-    text_color="#ffffff",              # Couleur du texte
-    arrow_color="#ffffff"              # Couleur des flèches
-)
-```
-
-### Exemples d'utilisation :
-
-```python
-# Configuration basique
-result = image_carousel(images=images, key="basic")
-
-# Configuration personnalisée
-result = image_carousel(
-    images=images,
-    max_visible=7,
-    background_color="#0f0f23",
-    active_border_color="#00ff88",
-    active_glow_color="rgba(0, 255, 136, 0.6)",
-    arrow_color="#00ff88",
-    key="custom"
-)
-
-# Configuration pour thème clair
-result = image_carousel(
-    images=images,
-    background_color="#f8fafc",
-    active_border_color="#3b82f6",
-    text_color="#1e293b",
-    arrow_color="#3b82f6",
-    key="light_theme"
-)
-```
-""")
+with col3:
+    st.metric("Joueurs visibles", max_visible)
