@@ -4,22 +4,15 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    lib: {
-      entry: 'src/index.tsx',
-      name: 'CustomComponent',
-      fileName: 'index',
-      formats: ['es', 'umd']
-    },
+    outDir: 'build',
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      input: 'index.html',
       output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM'
-        }
+        entryFileNames: 'index.mjs',
+        chunkFileNames: '[name].mjs',
+        assetFileNames: '[name].[ext]'
       }
-    },
-    outDir: 'build'
+    }
   },
   server: {
     port: 3001

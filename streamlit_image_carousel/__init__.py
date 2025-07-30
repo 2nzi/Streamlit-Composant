@@ -2,7 +2,7 @@ import os
 import streamlit.components.v1 as components
 
 # Déclarer le composant
-_RELEASE = True  # Toujours en mode développement pour l'instant
+_RELEASE = False  # Mode développement pour tester localement
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -10,6 +10,7 @@ if not _RELEASE:
         url="http://localhost:3001",
     )
 else:
+    # Utiliser le chemin absolu pour que ça fonctionne après installation
     parent_dir = os.path.dirname(os.path.abspath(__file__))
     build_dir = os.path.join(parent_dir, "frontend", "build")
     _component_func = components.declare_component("custom_component", path=build_dir)
