@@ -30,6 +30,8 @@ function ImageSelector({ args }: ComponentProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [filteredPlayers, setFilteredPlayers] = useState<ImageItem[]>([])
+  const [showSearchBar, setShowSearchBar] = useState(false)
+  const [isSearchHovered, setIsSearchHovered] = useState(false)
 
   useEffect(() => {
     // Informer Streamlit que le composant est prêt
@@ -84,6 +86,7 @@ function ImageSelector({ args }: ComponentProps) {
       setActiveIndex(index)
       setSearchTerm('')
       setShowSuggestions(false)
+      setIsSearchHovered(false) // Fermer la barre après sélection
       
       // Envoyer les données à Python
       Streamlit.setComponentValue({
@@ -207,19 +210,24 @@ function ImageSelector({ args }: ComponentProps) {
       fontFamily: 'Urbanist, sans-serif',
       // maxHeight: '100px'  // Augmentation de la hauteur minimale
     }}>
-      {/* Nom du joueur actif */}
-      <div style={{
-        position: 'relative',
-        textAlign: 'center',
-        fontSize: '1.2rem',
-        fontWeight: 'bold',
-        marginBottom: '1rem',
-        color: text_color,
-        textTransform: 'uppercase',
-        letterSpacing: '1px'
-      }}>
-        {images[activeIndex]?.name || 'Joueur inconnu'}
-      </div>
+      {/* Nom du joueur actif - Affiché seulement en mode horizontal */}
+      {orientation === 'horizontal' && (
+        <div style={{
+          position: 'relative',
+          textAlign: 'center',
+          fontSize: '1.2rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: text_color,
+          textTransform: 'uppercase',
+          letterSpacing: '1px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
+        }}>
+          {images[activeIndex]?.name || 'Joueur inconnu'}
+        </div>
+      )}
 
       {/* Carrousel des joueurs */}
       <div style={{
@@ -394,67 +402,133 @@ function ImageSelector({ args }: ComponentProps) {
       <div style={{
         marginTop: '2rem',
         position: 'relative',
-        width: '300px',
+        width: orientation === 'vertical' ? '120px' : '300px',
         margin: '2rem auto 0 auto',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: '100px'
+        minHeight: orientation === 'vertical' ? '60px' : '100px'
       }}>
-        {/* Barre de recherche */}
-        <div style={{
-          position: 'relative',
-          marginBottom: '1rem',
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Rechercher..."
+                {/* Mode vertical : Icône de loupe compacte */}
+        {orientation === 'vertical' && !isSearchHovered && searchTerm.trim().length === 0 ? (
+          <button
             style={{
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.8) 0%, rgba(240,240,240,0.9) 100%)',
+              border: '2px solid rgba(50, 50, 50, 0.15)',
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              marginBottom: '1rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.8)',
+              backdropFilter: 'blur(10px)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(200, 200, 200, 0.6)'
+              e.currentTarget.style.transform = 'scale(1.1) rotate(5deg)'
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1)'
+              e.currentTarget.style.border = '2px solid rgba(50, 50, 50, 0.4)'
+              setIsSearchHovered(true)
+            }}
+          >
+            <div style={{
+              width: '14px',
+              height: '14px',
+              border: `3px solid ${text_color}`,
+              borderRadius: '50%',
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 70%)`
+            }}>
+              
+              
+              {/* Manche de la loupe avec effet 3D */}
+              <div style={{
+                width: '10px',
+                height: '3px',
+                background: `linear-gradient(45deg, ${text_color} 0%, ${text_color} 70%, rgba(0,0,0,0.3) 100%)`,
+                position: 'absolute',
+                bottom: '-6px',
+                right: '-6px',
+                transform: 'rotate(45deg)',
+                borderRadius: '2px',
+                boxShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+              }} />
+            </div>
+          </button>
+                ) : (
+          /* Barre de recherche normale ou mode vertical étendu */
+          <div 
+            style={{
+              position: 'relative',
+              marginBottom: '1rem',
               width: '100%',
-              maxWidth: '280px',
-              padding: '10px 14px',
-              paddingLeft: '35px',
-              border: '2px solid rgba(50, 50, 50, 0.2)',
-              borderRadius: '20px',
-              backgroundColor: 'rgba(184, 184, 184, 0.46)',
-              color: text_color,
-              fontSize: '14px',
-              outline: 'none',
-              transition: 'all 0.3s ease',
-              fontFamily: 'Urbanist, sans-serif',
-              textAlign: 'left'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px'
             }}
-            onFocus={() => setShowSuggestions(true)}
-            onBlur={() => {
-              setTimeout(() => setShowSuggestions(false), 200)
+            onMouseLeave={() => {
+              // Garder la barre ouverte si du texte est saisi
+              if (searchTerm.trim().length === 0) {
+                setIsSearchHovered(false)
+                setShowSuggestions(false)
+              }
             }}
-          />
-        </div>
+          >
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Rechercher..."
+              style={{
+                width: '100%',
+                maxWidth: orientation === 'vertical' ? '100px' : '280px',
+                padding: '10px 14px',
+                paddingLeft: '35px',
+                border: '2px solid rgba(50, 50, 50, 0.2)',
+                borderRadius: '20px',
+                backgroundColor: 'rgba(184, 184, 184, 0.46)',
+                color: text_color,
+                fontSize: '14px',
+                outline: 'none',
+                transition: 'all 0.3s ease',
+                fontFamily: 'Urbanist, sans-serif',
+                textAlign: 'left'
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => {
+                setTimeout(() => setShowSuggestions(false), 200)
+              }}
+            />
+          </div>
+        )}
 
-        {/* Suggestions - Simplifiées */}
+        {/* Suggestions - Adaptées selon l'orientation */}
         {showSuggestions && filteredPlayers.length > 0 && (
           <div style={{
-            width: '280px',
+            width: orientation === 'vertical' ? '120px' : '280px',
             backgroundColor: 'rgba(50, 50, 50, 0.2)',
             borderRadius: '12px',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            maxHeight: '40px',
+            maxHeight: orientation === 'vertical' ? '120px' : '40px',
             overflowY: 'auto',
             zIndex: 1000,
             backdropFilter: 'blur(10px)',
             marginTop: '0'
           }}>
-            {filteredPlayers.slice(0, 5).map((player, index) => (
+            {filteredPlayers.slice(0, orientation === 'vertical' ? 3 : 5).map((player, index) => (
               <div
                 key={index}
                 onClick={() => selectPlayerFromSearch(player)}
                 style={{
-                  padding: '12px 16px',
+                  padding: orientation === 'vertical' ? '8px 12px' : '12px 16px',
                   cursor: 'pointer',
                   borderBottom: index < filteredPlayers.length - 1 ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
                   transition: 'background-color 0.2s ease',
@@ -468,8 +542,11 @@ function ImageSelector({ args }: ComponentProps) {
                 }}
               >
                 <div style={{
-                  fontSize: '14px',
-                  color: text_color
+                  fontSize: orientation === 'vertical' ? '12px' : '14px',
+                  color: text_color,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}>
                   {player.name}
                 </div>
@@ -485,8 +562,8 @@ function ImageSelector({ args }: ComponentProps) {
             padding: '10px',
             color: text_color,
             opacity: 0.7,
-            fontSize: '13px',
-            width: '280px',
+            fontSize: orientation === 'vertical' ? '11px' : '13px',
+            width: orientation === 'vertical' ? '120px' : '280px',
             marginTop: '0'
           }}>
             Aucun joueur trouvé pour "{searchTerm}"
