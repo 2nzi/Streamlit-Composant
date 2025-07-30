@@ -15,13 +15,13 @@ function ImageSelector({ args }: ComponentProps) {
     images, 
     selected_image, 
     max_visible = 5,
-    background_color = '#1a1a2e',
+    background_color = '#ffffff',
     active_border_color = '#ffffff',
     active_glow_color = 'rgba(255, 255, 255, 0.5)',
-    fallback_background = '#2a2a3e',
-    fallback_gradient_end = 'rgb(0, 0, 0)',
-    text_color = '#ffffff',
-    arrow_color = '#ffffff'
+    fallback_background = '#000000',
+    fallback_gradient_end = '#000000',
+    text_color = '#000000',
+    arrow_color = '#31333f'
   } = args
   
   const [activeIndex, setActiveIndex] = useState(0)
@@ -246,7 +246,7 @@ function ImageSelector({ args }: ComponentProps) {
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   border: isSelected ? `2px solid ${active_border_color}` : '2px solid transparent',
-                  backgroundColor: '#000000',
+                  backgroundColor: 'rgba(50, 50, 50, 0.46)',
                   opacity: 1,
                   visibility: 'visible',
                   zIndex: isSelected ? 5 : 5 - Math.abs(index - Math.floor(max_visible / 2)),
@@ -371,9 +371,9 @@ function ImageSelector({ args }: ComponentProps) {
               maxWidth: '280px',
               padding: '10px 14px',
               paddingLeft: '35px',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              border: '2px solid rgba(50, 50, 50, 0.2)',
               borderRadius: '20px',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(184, 184, 184, 0.46)',
               color: text_color,
               fontSize: '14px',
               outline: 'none',

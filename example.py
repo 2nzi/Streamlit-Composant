@@ -88,15 +88,15 @@ col1, col2 = st.columns(2)
 
 with col1:
     max_visible = st.slider("Nombre de joueurs visibles", 3, 9, 5, 2)
-    background_color = st.color_picker("Couleur de fond", "#1a1a2e")
-    active_border_color = st.color_picker("Couleur bordure active", "#ffffff")
-    text_color = st.color_picker("Couleur du texte", "#ffffff")
+    background_color = st.color_picker("Couleur de fond", "#ffffff")
+    active_border_color = st.color_picker("Couleur bordure active", "#000000")
+    text_color = st.color_picker("Couleur du texte", "#000000")
 
 with col2:
     active_glow_color = st.color_picker("Couleur lueur active", "#ffffff", help="Couleur de l'effet de lueur autour du joueur sélectionné")
-    fallback_background = st.color_picker("Couleur fond fallback", "#2a2a3e")
-    fallback_gradient_end = st.color_picker("Couleur fin gradient", "#000000")
-    arrow_color = st.color_picker("Couleur des flèches", "#ffffff", help="Couleur des flèches de navigation")
+    fallback_background = st.color_picker("Couleur fond fallback", "#ffffff")
+    fallback_gradient_end = st.color_picker("Couleur fin gradient", "#ffffff")
+    # arrow_color = st.color_picker("Couleur des flèches", "#000000", help="Couleur des flèches de navigation")
 
 # Utiliser le composant avec personnalisation
 result = image_carousel(
@@ -109,7 +109,7 @@ result = image_carousel(
     fallback_background=fallback_background,
     fallback_gradient_end=fallback_gradient_end,
     text_color=text_color,
-    arrow_color=arrow_color,
+    # arrow_color=arrow_color,
     key="joueur_carousel"
 )
 
