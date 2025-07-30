@@ -395,7 +395,7 @@ function ImageSelector({ args }: ComponentProps) {
             backgroundColor: 'rgba(0, 0, 0, 0.9)',
             borderRadius: '12px',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            maxHeight: '200px',
+            maxHeight: '120px',
             overflowY: 'auto',
             zIndex: 1000,
             backdropFilter: 'blur(10px)',
