@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "streamlit-image-carousel"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Antoine", email="votre-email@example.com" },
 ]
@@ -29,9 +29,9 @@ dependencies = [
 keywords = ["streamlit", "component", "carousel", "image", "interactive", "ui"]
 
 [project.urls]
-Homepage = "https://github.com/antoine/streamlit-image-carousel"
-Issues = "https://github.com/antoine/streamlit-image-carousel/issues"
-Source = "https://github.com/antoine/streamlit-image-carousel"
+Homepage = "https://github.com/2nzi/Streamlit-Composant"
+Issues = "https://github.com/2nzi/Streamlit-Composant/issues"
+Source = "https://github.com/2nzi/Streamlit-Composant"
 
 [tool.setuptools.packages.find]
 where = ["."]
