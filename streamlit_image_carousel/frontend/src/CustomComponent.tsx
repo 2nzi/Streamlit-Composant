@@ -15,6 +15,7 @@ function ImageSelector({ args }: ComponentProps) {
     images, 
     selected_image, 
     max_visible = 5,
+    orientation = 'horizontal',
     background_color = '#000000',
     active_border_color = '#ffffff',
     active_glow_color = 'rgba(255, 255, 255, 0.5)',
@@ -156,6 +157,32 @@ function ImageSelector({ args }: ComponentProps) {
     })
   }
 
+  const scrollUp = () => {
+    const newIndex = (activeIndex - 1 + images.length) % images.length
+    setActiveIndex(newIndex)
+    
+    const selectedImage = images[newIndex]
+    Streamlit.setComponentValue({
+      selected_image: selectedImage.name,
+      selected_url: selectedImage.url,
+      current_index: newIndex,
+      timestamp: new Date().toISOString()
+    })
+  }
+
+  const scrollDown = () => {
+    const newIndex = (activeIndex + 1) % images.length
+    setActiveIndex(newIndex)
+    
+    const selectedImage = images[newIndex]
+    Streamlit.setComponentValue({
+      selected_image: selectedImage.name,
+      selected_url: selectedImage.url,
+      current_index: newIndex,
+      timestamp: new Date().toISOString()
+    })
+  }
+
   if (!images || images.length === 0) {
     return (
       <div style={{ 
@@ -197,16 +224,17 @@ function ImageSelector({ args }: ComponentProps) {
       {/* Carrousel des joueurs */}
       <div style={{
         width: '100%',
-        maxWidth: '500px',
+        maxWidth: orientation === 'horizontal' ? '500px' : '200px',
         margin: '0 auto 2rem auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '15px'
+        gap: '15px',
+        flexDirection: orientation === 'vertical' ? 'column' : 'row'
       }}>
         {/* Bouton précédent */}
         <button
-          onClick={scrollLeft}
+          onClick={orientation === 'horizontal' ? scrollLeft : scrollUp}
           style={{
             background: 'none',
             border: 'none',
@@ -218,7 +246,8 @@ function ImageSelector({ args }: ComponentProps) {
             justifyContent: 'center',
             padding: 0,
             opacity: 1,
-            transition: 'opacity 0.3s ease'
+            transition: 'opacity 0.3s ease',
+            transform: orientation === 'vertical' ? 'rotate(90deg)' : 'none'
           }}
         >
           <div style={{
@@ -238,8 +267,9 @@ function ImageSelector({ args }: ComponentProps) {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            height: '120px',
-            width: '500px'
+            height: orientation === 'horizontal' ? '120px' : '500px',
+            width: orientation === 'horizontal' ? '500px' : '120px',
+            flexDirection: orientation === 'vertical' ? 'column' : 'row'
           }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
@@ -267,8 +297,11 @@ function ImageSelector({ args }: ComponentProps) {
                   boxShadow: isSelected ? 
                     `0 0 10px ${active_glow_color}, 0 0 20px ${active_glow_color.replace('0.5', '0.3')}, 0 0 30px ${active_glow_color.replace('0.5', '0.1')}` : 
                     'none',
-                  left: `${(index / (max_visible - 1)) * 100}%`,
-                  transform: `translateX(-${(index / (max_visible - 1)) * 100}%)`
+                  left: orientation === 'horizontal' ? `${(index / (max_visible - 1)) * 100}%` : '50%',
+                  top: orientation === 'vertical' ? `${(index / (max_visible - 1)) * 100}%` : '50%',
+                  transform: orientation === 'horizontal' 
+                    ? `translateX(-${(index / (max_visible - 1)) * 100}%) translateY(-50%)`
+                    : `translateX(-50%) translateY(-${(index / (max_visible - 1)) * 100}%)`
                 }}
               >
                 {image.url ? (
@@ -330,7 +363,7 @@ function ImageSelector({ args }: ComponentProps) {
 
         {/* Bouton suivant */}
         <button
-          onClick={scrollRight}
+          onClick={orientation === 'horizontal' ? scrollRight : scrollDown}
           style={{
             background: 'none',
             border: 'none',
@@ -342,7 +375,8 @@ function ImageSelector({ args }: ComponentProps) {
             justifyContent: 'center',
             padding: 0,
             opacity: 1,
-            transition: 'opacity 0.3s ease'
+            transition: 'opacity 0.3s ease',
+            transform: orientation === 'vertical' ? 'rotate(90deg)' : 'none'
           }}
         >
           <div style={{
@@ -379,7 +413,7 @@ function ImageSelector({ args }: ComponentProps) {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Rechercher un joueur..."
+            placeholder="Rechercher..."
             style={{
               width: '100%',
               maxWidth: '280px',

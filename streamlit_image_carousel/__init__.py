@@ -22,6 +22,7 @@ def image_carousel(
     images: list, 
     selected_image: str = None, 
     max_visible: int = 5,
+    orientation: str = 'horizontal',
     background_color: str = '#1a1a2e',
     active_border_color: str = '#ffffff',
     active_glow_color: str = 'rgba(255, 255, 255, 0.5)',
@@ -42,6 +43,8 @@ def image_carousel(
         Image actuellement sélectionnée (optionnel)
     max_visible : int
         Nombre maximum d'images visibles à la fois (défaut: 5)
+    orientation : str
+        Orientation du carousel: 'horizontal' ou 'vertical' (défaut: 'horizontal')
     background_color : str
         Couleur de fond du composant (défaut: '#1a1a2e')
     active_border_color : str
@@ -69,6 +72,7 @@ def image_carousel(
         images=images,
         selected_image=selected_image,
         max_visible=max_visible,
+        orientation=orientation,
         background_color=background_color,
         active_border_color=active_border_color,
         active_glow_color=active_glow_color,

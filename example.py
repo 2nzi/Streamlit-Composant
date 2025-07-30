@@ -93,6 +93,11 @@ with col1:
     text_color = st.color_picker("Couleur du texte", "#000000")
 
 with col2:
+    orientation = st.selectbox(
+        "Orientation du carrousel",
+        ["horizontal", "vertical"],
+        help="Choisissez l'orientation d'affichage du carrousel"
+    )
     active_glow_color = st.color_picker("Couleur lueur active", "#ffffff", help="Couleur de l'effet de lueur autour du joueur sélectionné")
     fallback_background = st.color_picker("Couleur fond fallback", "#ffffff")
     fallback_gradient_end = st.color_picker("Couleur fin gradient", "#ffffff")
@@ -103,6 +108,7 @@ result = image_carousel(
     images=joueurs_images,
     selected_image=None,
     max_visible=max_visible,
+    orientation=orientation,
     background_color=background_color,
     active_border_color=active_border_color,
     active_glow_color=f"rgba({int(active_glow_color[1:3], 16)}, {int(active_glow_color[3:5], 16)}, {int(active_glow_color[5:7], 16)}, 0.5)",
@@ -199,6 +205,51 @@ if result is not None:
         st.image(result["selected_url"], width=200)
 else:
     st.info(" Cliquez sur un joueur dans le carrousel pour voir ses informations")
+
+# Comparaison des orientations
+st.header("🔄 Comparaison des Orientations")
+
+st.markdown("""
+Voici une comparaison des deux orientations disponibles :
+- **Horizontal** : Affichage classique de gauche à droite
+- **Vertical** : Affichage de haut en bas, idéal pour les espaces étroits
+""")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("📏 Orientation Horizontale")
+    result_horizontal = image_carousel(
+        images=joueurs_images[:7],  # Limiter pour l'exemple
+        selected_image=None,
+        max_visible=5,
+        orientation="horizontal",
+        background_color="#f0f0f0",
+        active_border_color="#007bff",
+        active_glow_color="rgba(0, 123, 255, 0.5)",
+        fallback_background="#e9ecef",
+        fallback_gradient_end="#dee2e6",
+        text_color="#212529",
+        arrow_color="#6c757d",
+        key="horizontal_example"
+    )
+
+with col2:
+    st.subheader("📐 Orientation Verticale")
+    result_vertical = image_carousel(
+        images=joueurs_images[:7],  # Limiter pour l'exemple
+        selected_image=None,
+        max_visible=5,
+        orientation="vertical",
+        background_color="#f8f9fa",
+        active_border_color="#28a745",
+        active_glow_color="rgba(40, 167, 69, 0.5)",
+        fallback_background="#d4edda",
+        fallback_gradient_end="#c3e6cb",
+        text_color="#155724",
+        arrow_color="#6c757d",
+        key="vertical_example"
+    )
 
 # 📊 Statistiques
 st.header("📈 Statistiques")
