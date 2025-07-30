@@ -96,7 +96,7 @@ with col2:
     active_glow_color = st.color_picker("Couleur lueur active", "#ffffff", help="Couleur de l'effet de lueur autour du joueur sélectionné")
     fallback_background = st.color_picker("Couleur fond fallback", "#ffffff")
     fallback_gradient_end = st.color_picker("Couleur fin gradient", "#ffffff")
-    # arrow_color = st.color_picker("Couleur des flèches", "#000000", help="Couleur des flèches de navigation")
+    arrow_color = st.color_picker("Couleur des flèches", "#31333f", help="Couleur des flèches de navigation")
 
 # Utiliser le composant avec personnalisation
 result = image_carousel(
@@ -109,7 +109,7 @@ result = image_carousel(
     fallback_background=fallback_background,
     fallback_gradient_end=fallback_gradient_end,
     text_color=text_color,
-    # arrow_color=arrow_color,
+    arrow_color=arrow_color,
     key="joueur_carousel"
 )
 
