@@ -1,5 +1,5 @@
 {
-  "name": "streamlit-image-carousel-frontend",
+  "name": "st_image_carousel",
   "version": "0.1.0",
   "description": "Frontend pour le composant Streamlit Image Carousel",
   "main": "dist/index.js",

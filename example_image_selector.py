@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_image_carousel import image_carousel
+from st_image_carousel import image_carousel
 
 st.set_page_config(page_title="Exemple Image Selector", page_icon="🎨")
 
